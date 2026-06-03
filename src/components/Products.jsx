@@ -43,9 +43,13 @@ const products = [
   }
 ]
 
+import { useState } from 'react'
+
 function Products() {
+  const [hoveredId, setHoveredId] = useState(2)
+
   return (
-    <section id="products" className="py-20 bg-white">
+    <section id="products" className="products-section py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-black mb-4">全案能源方案</h2>
@@ -55,67 +59,84 @@ function Products() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <div 
-              key={product.id} 
-              className={`relative rounded-xl overflow-hidden transition-all duration-300 ${
-                product.popular 
-                  ? 'border-2 border-black shadow-lg -mt-4' 
-                  : 'bg-white shadow-md border border-gray-100'
-              }`}
-            >
-              {product.popular && (
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="px-3 py-1 bg-black text-white text-xs font-semibold rounded-full">
-                    最受欢迎
-                  </span>
-                </div>
-              )}
+          {products.map((product) => {
+            const isHovered = hoveredId === product.id
+            return (
+              <div 
+                key={product.id}
+                onMouseEnter={() => setHoveredId(product.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                className={`product-card relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 ease-out border-2 ${
+                  isHovered
+                    ? 'border-black -translate-y-5 scale-[1.04] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.3)]' 
+                    : 'border-gray-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'
+                }`}
+                style={{ willChange: 'transform, box-shadow' }}
+              >
+                {isHovered && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="px-4 py-1.5 bg-black text-white text-xs font-semibold rounded-full shadow-lg">
+                      最受欢迎
+                    </span>
+                  </div>
+                )}
               
-              <div className="aspect-video overflow-hidden">
-                <img 
-                  src={product.image} 
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+                <div className="aspect-video overflow-hidden">
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
+                      isHovered ? 'scale-115' : 'scale-100'
+                    }`}
+                  />
+                </div>
               
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-black mb-2">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-4">{product.description}</p>
-                
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  <div className="text-center p-2 bg-gray-50 rounded-lg">
-                    <div className="text-sm font-semibold text-black">{product.power}</div>
-                    <div className="text-xs text-gray-500">功率</div>
+                <div className="p-6 bg-white">
+                  <h3 className="text-lg font-bold text-black mb-2">{product.name}</h3>
+                  <p className="text-sm text-gray-600 mb-4">{product.description}</p>
+                  
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <div className="text-sm font-semibold text-black">{product.power}</div>
+                      <div className="text-xs text-gray-500">功率</div>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <div className="text-sm font-semibold text-black">{product.efficiency}</div>
+                      <div className="text-xs text-gray-500">效率</div>
+                    </div>
+                    <div className="text-center p-2 bg-gray-50 rounded-lg">
+                      <div className="text-sm font-semibold text-black">{product.warranty}</div>
+                      <div className="text-xs text-gray-500">质保</div>
+                    </div>
                   </div>
-                  <div className="text-center p-2 bg-gray-50 rounded-lg">
-                    <div className="text-sm font-semibold text-black">{product.efficiency}</div>
-                    <div className="text-xs text-gray-500">效率</div>
+                  
+                  <ul className="space-y-2 mb-4">
+                    {product.features.map((feature, index) => (
+                      <li key={index} className="flex items-center text-xs text-gray-600">
+                        <span className="w-1.5 h-1.5 bg-[#016d35] rounded-full mr-2 flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="text-xl font-bold text-black">{product.price}</span>
+                    <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
                   </div>
-                  <div className="text-center p-2 bg-gray-50 rounded-lg">
-                    <div className="text-sm font-semibold text-black">{product.warranty}</div>
-                    <div className="text-xs text-gray-500">质保</div>
-                  </div>
+                  
+                  <button 
+                    className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
+                      isHovered
+                        ? 'bg-black text-white shadow-md'
+                        : 'bg-gray-100 text-black hover:bg-gray-200'
+                    }`}
+                  >
+                    {product.buttonText}
+                  </button>
                 </div>
-                
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-xl font-bold text-black">{product.price}</span>
-                  <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
-                </div>
-                
-                <button 
-                  className={`w-full py-3 rounded-lg font-semibold transition-all ${
-                    product.popular
-                      ? 'bg-black text-white hover:bg-gray-900'
-                      : 'bg-gray-100 text-black hover:bg-gray-200'
-                  }`}
-                >
-                  {product.buttonText}
-                </button>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

@@ -39,7 +39,7 @@ const features = [
 
 function Features() {
   return (
-    <section id="features" className="py-20 bg-gray-50">
+    <section id="features" className="features-section py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-black mb-4">为什么选择 Nexus Energy?</h2>
@@ -52,7 +52,7 @@ function Features() {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100"
+              className="feature-card bg-white rounded-xl p-6 text-center shadow-sm border border-gray-100"
             >
               <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4 text-black">
                 {feature.icon}
